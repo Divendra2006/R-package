@@ -1,0 +1,17 @@
+Package: DBmaps
+Title: Tools for Database Exploration and Merging
+Version: 0.1.0
+Authors@R: person("Your", "Name", email = "your.email@example.com", role = c("aut", "cre"))
+Description: A package for exploring, mapping, and merging tables in a relational database.
+License: MIT +file LICENSE
+Encoding: UTF-8
+Imports:
+    data.table,
+    igraph,
+    ggplot2
+Suggests:
+    knitr,
+    rmarkdown,
+    testthat
+VignetteBuilder: knitr
+RoxygenNote: 7.3.2

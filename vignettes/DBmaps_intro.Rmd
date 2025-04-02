@@ -1,0 +1,85 @@
+---
+title: "Introduction to DBmaps"
+author: "DIVENDRA SINGH YADAV"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction to DBmaps}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+# Introduction
+
+The `DBmaps` package provides tools for exploring, mapping, and merging tables in a relational database. This vignette demonstrates how to use the key functions in the package: `create.DB.map`, `multi.merge`, and `visualize.DB.map`.
+
+## Example: Creating a Database Map
+
+The `create.DB.map` function constructs a map of relationships between tables in a database. It specifies which tables can be joined, the linking variables, the type of join, and optional aggregations.
+
+```{r setup, include=FALSE}
+library(DBmaps)
+library(data.table)
+library(ggplot2)
+```
+
+## Creating a Database Map (`create.DB.map`)
+
+The `create.DB.map()` function helps visualize relationships between tables in a database.
+
+```{r}
+# Define example tables
+table1 <- data.table(id = c(1, 2), value1 = c("A", "B"))
+table2 <- data.table(id = c(2, 3), value2 = c("C", "D"))
+table3 <- data.table(id = c(3, 4), value3 = c("E", "F"))
+
+# Define relationships between tables
+relationships <- list(
+  list(table1 = "table1", table2 = "table2", key = "id", type = "inner"),
+  list(table1 = "table2", table2 = "table3", key = "id", type = "left")
+)
+
+# ✅ Use a named list for tables
+db_map <- create.DB.map(tables = list(
+  table1 = table1,
+  table2 = table2,
+  table3 = table3
+),
+by = list(
+    list(table1 = "table1", table2 = "table2", by.x = "id", by.y = "id"),
+    list(table1 = "table2", table2 = "table3", by.x = "id", by.y = "id")
+  )
+)
+
+# Print map summary
+print(db_map)
+```
+
+## Merging Tables (`multi.merge`)
+
+The `multi.merge()` function merges multiple tables based on specified keys and join types.
+
+```{r}
+# Merge tables using inner and left joins
+merged_result <- multi.merge(
+  tables = list(
+    table1 = table1,
+    table2 = table2,
+    table3 = table3
+  ),
+  by = "id",
+  types = c("inner", "left")
+)
+
+# View the merged result
+print(merged_result)
+
+```
+
+## Visualizing Database Relationships (`visualize.DB.map`)
+
+The `visualize.DB.map()` function creates a graphical representation of the database schema.
+
+```{r}
+# Visualize database map
+visualize.DB.map(db_map)
+```
